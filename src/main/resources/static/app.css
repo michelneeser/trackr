@@ -1,0 +1,11 @@
+body {
+    background-color: beige;
+}
+
+a.generate {
+    margin: 3em;
+}
+
+.stat-values, .stat-actions {
+    margin-top: 30px;
+}

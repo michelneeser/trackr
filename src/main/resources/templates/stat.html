@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <title>Trackr - stats</title>
+
+        <link rel="stylesheet" href="/webjars/bootstrap/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/app.css">
+        <script src="/app.js"></script>
+    </head>
+
+    <body>
+        <div class="container">
+            <div>
+                <p>Congratulations, a new stats page has been created!</p>
+                <p>Call the following URL to push stats data:</p>
+                <a th:href="${stat.getURL()}" th:text="${stat.getURL()}">url</a>
+            </div>
+
+            <div th:if="${statValues != null}" class="stat-values">
+                <ul class="list-group">
+                    <li th:each="statValue: ${statValues}" class="list-group-item">
+                        <span th:text="${statValue.getValue()}">value</span> /
+                        <span th:text="${statValue.getCreateDate()}">createDate</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="stat-actions">
+                <input type="text" id="valueToAdd">
+                <input type="hidden" id="token" th:attr="value=${stat.getToken()}">
+                <button type="button" class="btn btn-primary" id="addValue">add value!</button>
+            </div>
+        </div>
+    </body>
+
+</html>
