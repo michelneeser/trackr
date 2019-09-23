@@ -9,8 +9,9 @@
         <link href="https://fonts.googleapis.com/css?family=Roboto+Mono&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="/app.css">
 
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment-with-locales.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
         <script src="/app.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js"></script>
     </head>
 
     <body>
@@ -21,21 +22,30 @@
                 <p>Call the following URL to push stats data: <a th:href="${stat.getURL()}" th:text="${stat.getURL()}">url</a></p>
             </div>
 
-            <canvas id="chart"></canvas>
+            <div id="chart"></div>
 
-            <div th:if="${statValues != null && statValues.size() > 0}" class="stat-values">
-                <ul class="list-group">
-                    <li th:each="statValue: ${statValues}" class="list-group-item">
-                        <span th:text="${statValue.getValue()}">value</span> /
-                        <span th:text="${statValue.getCreateDate()}">createDate</span>
-                    </li>
-                </ul>
+            <div th:if="${hasStatValues}" class="stat-values">
+                <table class="table table-striped table-bordered">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col" class="date-column">Date</th>
+                            <th scope="col">Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="statValue: ${statValues}">
+                            <td th:text="${#dates.format(statValue.getCreateDate(), 'dd/MM/yyyy HH:mm:ss')}">createDate</td>
+                            <td th:text="${statValue.getValue()}">value</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
 
             <div class="stat-actions">
                 <input type="text" id="valueToAdd">
                 <input type="hidden" id="token" th:attr="value=${stat.getToken()}">
                 <button type="button" class="btn btn-primary" id="addValue">add value!</button>
+                <a href="/stats" class="btn btn btn-outline-danger btn-block new-stats-page">new stats page</a>
             </div>
         </div>
     </body>

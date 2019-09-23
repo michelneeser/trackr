@@ -1,6 +1,5 @@
 package ch.michelneeser.trackr.model;
 
-import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.util.Date;
 

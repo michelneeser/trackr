@@ -1,10 +1,11 @@
 package ch.michelneeser.trackr.model;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
+import org.apache.commons.lang3.math.NumberUtils;
+
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Entity
 public class Stat {
@@ -43,7 +44,13 @@ public class Stat {
     }
 
     public void addStatValue(StatValue statValue) {
-        this.statValues.add(statValue);
+        statValues.add(statValue);
+}
+
+    public boolean isNumeric() {
+        if (statValues.size() == 0) return false;
+        return statValues.stream()
+                .allMatch(statValue -> NumberUtils.isParsable(statValue.getValue()));
     }
 
     @Override
