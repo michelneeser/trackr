@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/stats")
+@RequestMapping("/stats/api")
 public class StatRestController {
 
     @Autowired
@@ -22,9 +22,15 @@ public class StatRestController {
 
         StatPostResponse response = new StatPostResponse();
         response.statToken = stat.getToken();
-        response.text = "Value successfully added!";
+        response.text = "value successfully added";
 
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/{token}")
+    public ResponseEntity getStat(@PathVariable String token) {
+        Stat stat = statService.get(token).orElse(statService.create());
+        return ResponseEntity.ok(stat);
     }
 
     private static class StatPostRequest {

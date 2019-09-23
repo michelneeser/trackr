@@ -6,19 +6,24 @@
         <title>Trackr - stats</title>
 
         <link rel="stylesheet" href="/webjars/bootstrap/css/bootstrap.min.css">
+        <link href="https://fonts.googleapis.com/css?family=Roboto+Mono&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="/app.css">
+
         <script src="/app.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js"></script>
     </head>
 
     <body>
         <div class="container">
+            <h1>Trackr - your (very simple) stats page</h1>
+
             <div>
-                <p>Congratulations, a new stats page has been created!</p>
-                <p>Call the following URL to push stats data:</p>
-                <a th:href="${stat.getURL()}" th:text="${stat.getURL()}">url</a>
+                <p>Call the following URL to push stats data: <a th:href="${stat.getURL()}" th:text="${stat.getURL()}">url</a></p>
             </div>
 
-            <div th:if="${statValues != null}" class="stat-values">
+            <canvas id="chart"></canvas>
+
+            <div th:if="${statValues != null && statValues.size() > 0}" class="stat-values">
                 <ul class="list-group">
                     <li th:each="statValue: ${statValues}" class="list-group-item">
                         <span th:text="${statValue.getValue()}">value</span> /

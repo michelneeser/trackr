@@ -1,11 +1,18 @@
 body {
+    font-family: 'Roboto Mono', monospace;
     background-color: beige;
+}
+
+h1 {
+    font-size: 2em;
+    margin-top: 1em;
+    margin-bottom: 1em;
 }
 
 a.generate {
     margin: 3em;
 }
 
-.stat-values, .stat-actions {
-    margin-top: 30px;
+.stat-values, .stat-actions, #chart {
+    margin-top: 3em;
 }
