@@ -22,6 +22,18 @@ div.stat-values, div.stat-actions, #chart {
     margin-top: 3em;
 }
 
+div.no-stat-values {
+    text-align: center;
+}
+
+div.no-stat-values p {
+    margin-top: 1em;
+}
+
 th.date-column {
     width: 30%;
+}
+
+th.delete-column {
+    width: 10%;
 }

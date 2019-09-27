@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", function() {
-
     let token = document.querySelector("#token").value;
 
     document.querySelector("#addValue").addEventListener("click", function() {
@@ -15,6 +14,36 @@ document.addEventListener("DOMContentLoaded", function() {
         xhr.send(JSON.stringify({
             "value": valueToAdd
         }));
+    });
+
+    document.querySelectorAll(".delete-value").forEach(function(btn) {
+        btn.addEventListener("click", function() {
+            let valueId = this.closest("tr").dataset.valueid;
+            let xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                if (this.status == 200 && this.readyState == 4) {
+                    location.href = "http://localhost:8080/stats/" + token;
+                }
+            };
+            xhr.open("DELETE", "http://localhost:8080/stats/api/" + token + "/" + valueId);
+            xhr.send();
+        });
+    });
+
+    $('#reallyDeleteModal').on('show.bs.modal', function (e) {
+        let removeSelectedValue = function() {
+            let valueId = e.relatedTarget.closest("tr").dataset.valueid;
+            let xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                if (this.status == 200 && this.readyState == 4) {
+                    location.href = "http://localhost:8080/stats/" + token;
+                }
+            };
+            xhr.open("DELETE", "http://localhost:8080/stats/api/" + token + "/" + valueId);
+            xhr.send();
+        };
+
+        document.querySelector("#deleteValue").addEventListener("click", removeSelectedValue);
     });
 
     // render chart
@@ -54,5 +83,4 @@ document.addEventListener("DOMContentLoaded", function() {
     };
     xhr.open("GET", "http://localhost:8080/stats/api/" + token);
     xhr.send();
-
 });

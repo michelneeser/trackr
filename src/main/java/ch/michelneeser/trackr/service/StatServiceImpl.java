@@ -27,6 +27,16 @@ public class StatServiceImpl implements StatService {
     }
 
     @Override
+    public boolean delete(Stat stat, long statValueId) {
+        boolean deleteSuccessful = stat.deleteStatValue(statValueId);
+        if (deleteSuccessful) {
+            repo.save(stat);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
     public Stat save(Stat stat) {
         return repo.save(stat);
     }

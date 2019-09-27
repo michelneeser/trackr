@@ -43,9 +43,15 @@ public class Stat {
         return Collections.unmodifiableList(statValues);
     }
 
-    public void addStatValue(StatValue statValue) {
-        statValues.add(statValue);
-}
+    public long addStatValue(String statValue) {
+        long id = statValues.size() + 1;
+        statValues.add(new StatValue(id, statValue));
+        return id;
+    }
+
+    public boolean deleteStatValue(long statValueId) {
+        return statValues.removeIf(statValue -> statValue.getId() == statValueId);
+    }
 
     public boolean isNumeric() {
         if (statValues.size() == 0) return false;

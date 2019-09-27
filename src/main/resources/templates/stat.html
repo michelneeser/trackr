@@ -3,14 +3,20 @@
 
     <head>
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
         <title>Trackr - stats</title>
 
-        <link rel="stylesheet" href="/webjars/bootstrap/css/bootstrap.min.css">
-        <link href="https://fonts.googleapis.com/css?family=Roboto+Mono&display=swap" rel="stylesheet">
+        <!--<link rel="stylesheet" href="/webjars/bootstrap/css/bootstrap.min.css">-->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Mono&display=swap">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
         <link rel="stylesheet" href="/app.css">
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment-with-locales.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
         <script src="/app.js"></script>
     </head>
 
@@ -30,15 +36,23 @@
                         <tr>
                             <th scope="col" class="date-column">Date</th>
                             <th scope="col">Value</th>
+                            <th scope="col" class="delete-column"></th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr th:each="statValue: ${statValues}">
+                        <tr th:each="statValue: ${statValues}" th:attr="data-valueid=${statValue.getId()}">
                             <td th:text="${#dates.format(statValue.getCreateDate(), 'dd/MM/yyyy HH:mm:ss')}">createDate</td>
                             <td th:text="${statValue.getValue()}">value</td>
+                            <td>
+                                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#reallyDeleteModal">x</button>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
+            </div>
+
+            <div th:if="!${hasStatValues}" class="alert alert-dark no-stat-values" role="alert">
+                <p>nothing here yet - enter a value below to start</p>
             </div>
 
             <div class="stat-actions">
@@ -47,6 +61,28 @@
                 <button type="button" class="btn btn-primary" id="addValue">add value!</button>
                 <a href="/stats" class="btn btn btn-outline-danger btn-block new-stats-page">new stats page</a>
             </div>
+
+            <!-- Modal for asking "do you really want do delete?" -->
+            <div class="modal fade" id="reallyDeleteModal" tabindex="-1" role="dialog" aria-labelledby="reallyDeleteModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Delete</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Do you really want to delete this value?</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                            <button type="button" class="btn btn-danger" id="deleteValue">Yes</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </body>
 
