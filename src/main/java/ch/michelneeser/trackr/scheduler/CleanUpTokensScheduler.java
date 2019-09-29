@@ -1,4 +1,4 @@
-package ch.michelneeser.trackr.scheduled;
+package ch.michelneeser.trackr.scheduler;
 
 import ch.michelneeser.trackr.dao.StatRepository;
 import ch.michelneeser.trackr.model.Stat;
@@ -22,7 +22,7 @@ public class CleanUpTokensScheduler {
     @Autowired
     private StatRepository repo;
 
-    @Scheduled(fixedRate = 60000)
+    @Scheduled(fixedRate = 60000) // 60 secs
     public void cleanUpUnusedTokens() {
         LocalDateTime threeHoursAgo = LocalDateTime.now().minusHours(CLEANUP_THRESHOLD_HOURS);
         List<Stat> statsFromAtLeastThreeHoursAgo = repo.findByCreateDateLessThan(
