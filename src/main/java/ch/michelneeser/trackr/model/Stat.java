@@ -1,11 +1,12 @@
 package ch.michelneeser.trackr.model;
 
-import com.fasterxml.jackson.annotation.JsonGetter;
 import org.apache.commons.lang3.math.NumberUtils;
 
 import javax.persistence.*;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
 
 @Entity
 public class Stat {
@@ -16,7 +17,7 @@ public class Stat {
     private String token;
     private Date createDate = new Date();
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(joinColumns = @JoinColumn(name = "stat_id"))
     private List<StatValue> statValues = new ArrayList<>();
 
