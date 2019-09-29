@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", function() {
     let token = document.querySelector("#token").value;
 
-    document.querySelector("#addValue").addEventListener("click", function() {
+    let addEnteredValue = function() {
         let valueToAdd = document.querySelector("#valueToAdd").value;
         let xhr = new XMLHttpRequest();
         xhr.onreadystatechange = function() {
@@ -14,6 +14,16 @@ document.addEventListener("DOMContentLoaded", function() {
         xhr.send(JSON.stringify({
             "value": valueToAdd
         }));
+    };
+
+    document.querySelector("#addValue").addEventListener("click", function() {
+        addEnteredValue();
+    });
+
+    document.querySelector("#valueToAdd").addEventListener("keypress", function(e) {
+        if (e.key === 'Enter') {
+            addEnteredValue();
+        }
     });
 
     document.querySelectorAll(".delete-value").forEach(function(btn) {

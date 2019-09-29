@@ -22,7 +22,7 @@ public class CleanUpTokensScheduler {
     @Autowired
     private StatRepository repo;
 
-    @Scheduled(fixedRate = 60000) // 60 secs
+    @Scheduled(fixedRate = 5 * 60000) // 5 mins
     public void cleanUpUnusedTokens() {
         LocalDateTime threeHoursAgo = LocalDateTime.now().minusHours(CLEANUP_THRESHOLD_HOURS);
         List<Stat> statsFromAtLeastThreeHoursAgo = repo.findByCreateDateLessThan(

@@ -18,7 +18,7 @@ public class TrackrApplication {
     @Bean
     public CommandLineRunner demo(StatRepository repo) {
         return (args) -> {
-
+            // for testing purposes
         };
     }
 
