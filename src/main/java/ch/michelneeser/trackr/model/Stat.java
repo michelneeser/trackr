@@ -16,6 +16,7 @@ public class Stat {
     private long id;
     private String token;
     private Date createDate = new Date();
+    private String name;
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(joinColumns = @JoinColumn(name = "stat_id"))
@@ -30,6 +31,14 @@ public class Stat {
 
     public String getToken() {
         return token;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Date getCreateDate() {

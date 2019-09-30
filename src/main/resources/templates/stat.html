@@ -22,7 +22,8 @@
 
     <body>
         <div class="container">
-            <h1>Trackr - your (very simple) stats page</h1>
+            <h1 th:if="!${hasName}">Trackr - your (very simple) stats page</h1>
+            <h1 th:if="${hasName}" th:text="${stat.getName()}">name</h1>
 
             <div>
                 <p>Call the following URL to push stats data: <a th:href="${stat.getURL()}" th:text="${stat.getURL()}">url</a></p>
@@ -57,9 +58,11 @@
             </div>
 
             <div class="stat-actions">
-                <input type="text" id="valueToAdd">
                 <input type="hidden" id="token" th:attr="value=${stat.getToken()}">
+                <input type="text" id="valueToAdd">
                 <button type="button" class="btn btn-primary" id="addValue">add value!</button>
+                <input type="text" id="statName" th:value="${stat.getName()}">
+                <button type="button" class="btn btn-primary" id="setStatName">set stat name</button>
                 <a href="/stats" class="btn btn btn-outline-danger btn-block new-stats-page">new stats page</a>
             </div>
 

@@ -37,6 +37,20 @@ public class StatRestController {
         return ResponseEntity.ok(stat);
     }
 
+    @PutMapping("/{token}")
+    public ResponseEntity putStat(@PathVariable String token, @RequestBody StatOperationRequest request) {
+        Optional<Stat> statOptional = statService.get(token);
+
+        if (statOptional.isPresent()) {
+            Stat stat = statOptional.get();
+            stat.setName(request.value);
+            statService.save(stat);
+            return ResponseEntity.ok(stat);
+        }
+
+        return ResponseEntity.badRequest().body("not a valid token"); // FIXME
+    }
+
     @DeleteMapping("/{token}/{statValueId}")
     public ResponseEntity deleteStatValue(@PathVariable String token, @PathVariable long statValueId) {
         StatOperationResponse response = new StatOperationResponse();

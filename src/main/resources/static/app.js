@@ -26,6 +26,31 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     });
 
+    let setStatName = function() {
+        let statName = document.querySelector("#statName").value;
+        let xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function() {
+            if (this.status == 200 && this.readyState == 4) {
+                location.href = "http://localhost:8080/stats/" + token;
+            }
+        };
+        xhr.open("PUT", "http://localhost:8080/stats/api/" + token);
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.send(JSON.stringify({
+            "value": statName
+        }));
+    };
+
+    document.querySelector("#setStatName").addEventListener("click", function() {
+       setStatName();
+    });
+
+    document.querySelector("#statName").addEventListener("keypress", function(e) {
+        if (e.key === 'Enter') {
+            setStatName();
+        }
+    });
+
     document.querySelectorAll(".delete-value").forEach(function(btn) {
         btn.addEventListener("click", function() {
             let valueId = this.closest("tr").dataset.valueid;
