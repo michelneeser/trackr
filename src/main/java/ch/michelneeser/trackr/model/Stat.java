@@ -1,5 +1,8 @@
 package ch.michelneeser.trackr.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
 import javax.persistence.*;
@@ -16,8 +19,9 @@ public class Stat {
     private long id;
     private String token;
     private Date createDate = new Date();
-    private String name;
+    private String name = StringUtils.EMPTY;
 
+    @JsonIgnore
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(joinColumns = @JoinColumn(name = "stat_id"))
     private List<StatValue> statValues = new ArrayList<>();
@@ -45,18 +49,20 @@ public class Stat {
         return createDate;
     }
 
-    public String getURL() {
-        return "/stats/" + token;
+    @JsonProperty("values")
+    public int getStatValueCount() {
+        return statValues.size();
     }
 
     public List<StatValue> getStatValues() {
         return Collections.unmodifiableList(statValues);
     }
 
-    public long addStatValue(String statValue) {
+    public StatValue addStatValue(String statValue) {
         long id = statValues.size() + 1;
-        statValues.add(new StatValue(id, statValue));
-        return id;
+        StatValue newStatValue = new StatValue(id, statValue);
+        statValues.add(newStatValue);
+        return newStatValue;
     }
 
     public boolean deleteStatValue(long statValueId) {

@@ -37,3 +37,7 @@ th.date-column {
 th.delete-column {
     width: 10%;
 }
+
+#statName {
+    margin-left: 2em;
+}

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Controller
@@ -23,25 +24,37 @@ public class StatController {
     private StatService statService;
 
     @GetMapping(value={"", "/"})
-    public String getStat(Model model) {
-        model.addAttribute("stat", statService.create());
-        return "stat";
+    public String getStat() {
+        Stat stat = statService.create();
+        return getRedirectToToken(stat.getToken());
     }
 
     @GetMapping("/{token}")
     public String getStat(@PathVariable String token, Model model) {
-        Stat stat = statService.get(token).orElse(statService.create());
-        List<StatValue> statValues = stat.getStatValues();
+        Optional<Stat> statOptional = statService.get(token);
 
-        statValues = statValues.stream()
-                .sorted(Comparator.comparing(StatValue::getCreateDate).reversed())
-                .collect(Collectors.toList());
+        if (statOptional.isPresent()) {
+            Stat stat = statOptional.get();
+            List<StatValue> statValues = stat.getStatValues();
 
-        model.addAttribute("stat", stat);
-        model.addAttribute("hasName", StringUtils.isNotBlank(stat.getName()));
-        model.addAttribute("statValues", statValues);
-        model.addAttribute("hasStatValues", statValues.size() > 0);
-        return "stat";
+            statValues = statValues.stream()
+                    .sorted(Comparator.comparing(StatValue::getCreateDate).reversed())
+                    .collect(Collectors.toList());
+
+            model.addAttribute("stat", stat);
+            model.addAttribute("hasName", StringUtils.isNotBlank(stat.getName()));
+            model.addAttribute("statValues", statValues);
+            model.addAttribute("hasStatValues", statValues.size() > 0);
+            return "stat";
+        }
+        else {
+            Stat stat = statService.create();
+            return getRedirectToToken(stat.getToken());
+        }
+    }
+
+    private String getRedirectToToken(String token) {
+        return "redirect:/stats/" + token;
     }
 
 }

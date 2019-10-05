@@ -25,9 +25,11 @@
             <h1 th:if="!${hasName}">Trackr - your (very simple) stats page</h1>
             <h1 th:if="${hasName}" th:text="${stat.getName()}">name</h1>
 
+            <!--
             <div>
                 <p>Call the following URL to push stats data: <a th:href="${stat.getURL()}" th:text="${stat.getURL()}">url</a></p>
             </div>
+            -->
 
             <div id="chart"></div>
 
