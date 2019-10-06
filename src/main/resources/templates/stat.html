@@ -55,17 +55,18 @@
             </div>
 
             <div th:if="!${hasStatValues}" class="alert alert-dark no-stat-values" role="alert">
-                <p>Nothing here yet - enter a value below to start.</p>
+                <p>Nothing here yet &mdash; enter a value below to start.</p>
                 <p>If you don't add a value, this token will not be valid anymore in 6 hours.</p>
             </div>
 
             <div class="stat-actions">
                 <input type="hidden" id="token" th:attr="value=${stat.getToken()}">
                 <input type="text" id="valueToAdd">
-                <button type="button" class="btn btn-primary" id="addValue">add value!</button>
+                <button type="button" class="btn btn-primary" id="addValue">add value</button>
                 <input type="text" id="statName" th:value="${stat.getName()}">
                 <button type="button" class="btn btn-primary" id="setStatName">set stat name</button>
-                <a href="/stats" class="btn btn btn-outline-danger btn-block new-stats-page">new stats page</a>
+                <button type="button" class="btn btn-outline-danger btn-block delete-stat" id="deleteStat">delete stat</button>
+                <a href="/stats" class="btn btn btn-outline-dark btn-block new-stats-page">new stats page</a>
             </div>
 
             <!-- Modal for asking "do you really want do delete?" -->

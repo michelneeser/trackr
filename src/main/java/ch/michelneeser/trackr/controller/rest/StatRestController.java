@@ -10,13 +10,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/stats/api")
@@ -42,6 +40,23 @@ public class StatRestController {
         return assembler.toResource(stat);
     }
 
+    @PutMapping("/{token}")
+    public Resource<Stat> updateStat(@PathVariable String token, @RequestBody UpdateStatRequest request) {
+        Stat stat = getStatOrThrow(token);
+        stat.setName(request.name);
+        statService.save(stat);
+
+        return assembler.toResource(stat);
+    }
+
+    @DeleteMapping("/{token}")
+    public ResponseEntity deleteToken(@PathVariable String token) {
+        Stat stat = getStatOrThrow(token);
+        statService.delete(stat);
+
+        return ResponseEntity.ok(String.format("stat '%s' deleted", token));
+    }
+
     @GetMapping("/{token}/values")
     public Resources<Resource<StatValue>> getStatValues(@PathVariable String token) {
         Stat stat = getStatOrThrow(token);
@@ -50,16 +65,16 @@ public class StatRestController {
 
     @PostMapping("/{token}/values")
     public ResponseEntity createStatValue(@PathVariable String token, @RequestBody CreateStatValueRequest request) {
-        if (StringUtils.isNotBlank(request.value)) {
-            Stat stat = getStatOrThrow(token);
-            StatValue newStatValue = stat.addStatValue(request.value);
-            statService.save(stat);
-            URI location = toURI(assembler.toResource(stat, newStatValue));
-            return ResponseEntity.created(location).body(assembler.statValuesToResources(stat));
-        }
-        else {
+        if (!StringUtils.isNotBlank(request.value)) {
             throw new NoValueProvidedException(token);
         }
+
+        Stat stat = getStatOrThrow(token);
+        StatValue newStatValue = stat.addStatValue(request.value);
+        statService.save(stat);
+        URI location = toURI(assembler.toResource(stat, newStatValue));
+
+        return ResponseEntity.created(location).body(assembler.statValuesToResources(stat));
     }
 
     @GetMapping("/{token}/values/{statValueId}")
@@ -73,55 +88,17 @@ public class StatRestController {
         return assembler.toResource(stat, statValue);
     }
 
-    // TODO refactor from here!
-
-    @PutMapping("/{token}")
-    public ResponseEntity putStat(@PathVariable String token, @RequestBody CreateStatValueRequest request) {
-        Optional<Stat> statOptional = statService.get(token);
-
-        if (statOptional.isPresent()) {
-            Stat stat = statOptional.get();
-            stat.setName(request.value);
-            statService.save(stat);
-            return ResponseEntity.ok(stat);
-        }
-
-        return ResponseEntity.badRequest().body("not a valid token"); // FIXME
-    }
-
-    @DeleteMapping("/{token}/{statValueId}")
+    @DeleteMapping("/{token}/values/{statValueId}")
     public ResponseEntity deleteStatValue(@PathVariable String token, @PathVariable long statValueId) {
-        StatOperationResponse response = new StatOperationResponse();
-        Optional<Stat> statOptional = statService.get(token);
+        Stat stat = getStatOrThrow(token);
+        boolean deleteSuccessful = statService.delete(stat, statValueId);
 
-        if (statOptional.isPresent()) {
-            Stat stat = statOptional.get();
-            response.statToken = stat.getToken();
-            boolean deleteSuccessful = statService.delete(stat, statValueId);
-
-            if (deleteSuccessful) {
-                response.success = true;
-                response.statValueId = statValueId;
-                response.text = "value successfully deleted";
-            }
+        if (deleteSuccessful) {
+            return ResponseEntity.ok(String.format("value '%d' of stat '%s' deleted", statValueId, token));
         }
-
-        return getResponseEntity(response);
-    }
-
-    private ResponseEntity getResponseEntity(StatOperationResponse response) {
-        return ResponseEntity.status(response.success ? HttpStatus.OK : HttpStatus.BAD_REQUEST).body(response);
-    }
-
-    private static class CreateStatValueRequest {
-        public String value;
-    }
-
-    private static class StatOperationResponse {
-        public boolean success = false;
-        public String statToken;
-        public long statValueId;
-        public String text;
+        else {
+            return ResponseEntity.badRequest().body(String.format("could not delete value '%d' of stat '%s'", statValueId, token));
+        }
     }
 
     private Stat getStatOrThrow(String token) {
@@ -132,9 +109,16 @@ public class StatRestController {
         try {
             return new URI(resource.getLink("self").getHref());
         } catch (URISyntaxException e) {
-            e.printStackTrace(); // FIXME
+            throw new IllegalArgumentException("resource has not a valid self link");
         }
-        return null; // FIXME
+    }
+
+    private static class CreateStatValueRequest {
+        public String value;
+    }
+
+    private static class UpdateStatRequest {
+        public String name;
     }
 
 }

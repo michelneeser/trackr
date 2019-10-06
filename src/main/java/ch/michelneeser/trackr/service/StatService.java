@@ -9,6 +9,7 @@ public interface StatService {
     Stat create();
     Optional<Stat> get(String token);
     boolean delete(Stat stat, long statValueId);
+    void delete(Stat stat);
     Stat save(Stat stat);
 
 }

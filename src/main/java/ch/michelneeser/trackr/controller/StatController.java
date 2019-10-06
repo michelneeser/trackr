@@ -25,8 +25,7 @@ public class StatController {
 
     @GetMapping(value={"", "/"})
     public String getStat() {
-        Stat stat = statService.create();
-        return getRedirectToToken(stat.getToken());
+        return getRedirectToNewStat();
     }
 
     @GetMapping("/{token}")
@@ -48,13 +47,13 @@ public class StatController {
             return "stat";
         }
         else {
-            Stat stat = statService.create();
-            return getRedirectToToken(stat.getToken());
+            return getRedirectToNewStat();
         }
     }
 
-    private String getRedirectToToken(String token) {
-        return "redirect:/stats/" + token;
+    private String getRedirectToNewStat() {
+        Stat stat = statService.create();
+        return "redirect:/stats/" + stat.getToken();
     }
 
 }

@@ -37,6 +37,11 @@ public class StatServiceImpl implements StatService {
     }
 
     @Override
+    public void delete(Stat stat) {
+        repo.delete(stat);
+    }
+
+    @Override
     public Stat save(Stat stat) {
         return repo.save(stat);
     }

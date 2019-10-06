@@ -30,4 +30,11 @@ public class GlobalExceptionHandler {
         return ex.getMessage();
     }
 
+    @ResponseBody
+    @ExceptionHandler(IllegalArgumentException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public String illegalArgumentHandler(IllegalArgumentException ex) {
+        return ex.getMessage();
+    }
+
 }
