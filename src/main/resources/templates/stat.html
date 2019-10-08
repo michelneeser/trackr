@@ -22,59 +22,95 @@
 
     <body>
         <div class="container">
-            <h1 th:if="!${hasName}">Trackr - your (very simple) stats page</h1>
-            <h1 th:if="${hasName}" th:text="${stat.getName()}">name</h1>
+            <div class="row">
+                <div class="col">
+                    <h1 th:if="!${hasName}">Trackr - your (very simple) stats page</h1>
+                    <h1 th:if="${hasName}" th:text="${stat.getName()}">name</h1>
 
-            <!--
-            <div>
-                <p>Call the following URL to push stats data: <a th:href="${stat.getURL()}" th:text="${stat.getURL()}">url</a></p>
-            </div>
-            -->
+                    <!--
+                    <div>
+                        <p>Call the following URL to push stats data: <a th:href="${stat.getURL()}" th:text="${stat.getURL()}">url</a></p>
+                    </div>
+                    -->
 
-            <div id="chart"></div>
+                    <div id="chart"></div>
 
-            <div th:if="${hasStatValues}" class="stat-values">
-                <table class="table table-striped table-bordered">
-                    <thead class="thead-dark">
-                        <tr>
-                            <th scope="col" class="date-column">Date</th>
-                            <th scope="col">Value</th>
-                            <th scope="col" class="delete-column"></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr th:each="statValue: ${statValues}" th:attr="data-valueid=${statValue.getId()}">
-                            <td th:text="${#dates.format(statValue.getCreateDate(), 'dd/MM/yyyy HH:mm:ss')}">createDate</td>
-                            <td th:text="${statValue.getValue()}">value</td>
-                            <td>
-                                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#reallyDeleteModal">x</button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+                    <div th:if="${hasStatValues}" class="stat-values">
+                        <table class="table table-striped table-bordered">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th scope="col" class="date-column">Date</th>
+                                    <th scope="col">Value</th>
+                                    <th scope="col" class="delete-column"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="statValue: ${statValues}" th:attr="data-valueid=${statValue.getId()}">
+                                    <td th:text="${#dates.format(statValue.getCreateDate(), 'dd/MM/yyyy HH:mm:ss')}">createDate</td>
+                                    <td th:text="${statValue.getValue()}">value</td>
+                                    <td>
+                                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#reallyDeleteValueModal">x</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
 
-            <div th:if="!${hasStatValues}" class="alert alert-dark no-stat-values" role="alert">
-                <p>Nothing here yet &mdash; enter a value below to start.</p>
-                <p>If you don't add a value, this token will not be valid anymore in 6 hours.</p>
-            </div>
-
-            <div class="stat-actions">
-                <input type="hidden" id="token" th:attr="value=${stat.getToken()}">
-                <input type="text" id="valueToAdd">
-                <button type="button" class="btn btn-primary" id="addValue">add value</button>
-                <input type="text" id="statName" th:value="${stat.getName()}">
-                <button type="button" class="btn btn-primary" id="setStatName">set stat name</button>
-                <button type="button" class="btn btn-outline-danger btn-block delete-stat" id="deleteStat">delete stat</button>
-                <a href="/stats" class="btn btn btn-outline-dark btn-block new-stats-page">new stats page</a>
+                    <div th:if="!${hasStatValues}" class="alert alert-dark no-stat-values" role="alert">
+                        <p>Nothing here yet &mdash; enter a value below to start.</p>
+                        <p>If you don't add a value, this token will not be valid anymore in 6 hours.</p>
+                    </div>
+                </div>
             </div>
 
-            <!-- Modal for asking "do you really want do delete?" -->
-            <div class="modal fade" id="reallyDeleteModal" tabindex="-1" role="dialog" aria-labelledby="reallyDeleteModalLabel" aria-hidden="true">
+            <div class="row value-fields">
+                <div class="col-lg value-field">
+                    <input type="hidden" id="token" th:attr="value=${stat.getToken()}">
+                    <input type="text" id="valueToAdd">
+                    <button type="button" class="btn btn-primary" id="addValue">add value</button>
+                </div>
+                <div class="col-lg value-field">
+                    <input type="text" id="statName" th:value="${stat.getName()}">
+                    <button type="button" class="btn btn-primary" id="setStatName">set stat name</button>
+                </div>
+            </div>
+
+            <div class="row action-btns">
+                <div class="col-lg action-btn">
+                    <button type="button" class="btn btn-outline-danger btn-block delete-stat" data-toggle="modal" data-target="#reallyDeleteStatModal">delete stat</button>
+                </div>
+                <div class="col-lg action-btn">
+                    <a href="/stats" class="btn btn btn-outline-dark btn-block new-stats-page">new stats page</a>
+                </div>
+            </div>
+
+            <!-- modal for asking "do you really want do delete this stat?" -->
+            <div class="modal fade" id="reallyDeleteStatModal" tabindex="-1" role="dialog" aria-labelledby="reallyDeleteStatModalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Delete</h5>
+                            <h5 class="modal-title" id="reallyDeleteStatModalLabel">Delete</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Do you really want to delete this stat?</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                            <button type="button" class="btn btn-danger" id="deleteStat">Yes</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- modal for asking "do you really want do delete this value?" -->
+            <div class="modal fade" id="reallyDeleteValueModal" tabindex="-1" role="dialog" aria-labelledby="reallyDeleteValueModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="reallyDeleteValueModalLabel">Delete</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>

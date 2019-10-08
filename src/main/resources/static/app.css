@@ -13,16 +13,7 @@ a.generate {
     margin-top: 3em;
 }
 
-button.delete-stat {
-    margin-top: 3em;
-    margin-bottom: 2em;
-}
-
-a.new-stats-page {
-    margin-bottom: 3em;
-}
-
-div.stat-values, div.stat-actions, #chart {
+div.stat-values, #chart {
     margin-top: 3em;
 }
 
@@ -42,6 +33,16 @@ th.delete-column {
     width: 10%;
 }
 
-#statName {
-    margin-left: 2em;
+@media (min-width: 992px) {
+    .value-fields, .action-btns {
+        margin-top: 2em;
+        margin-bottom: 2em;
+    }
+}
+
+@media (max-width: 991px) {
+    .value-field, .action-btn {
+        margin-top: 1em;
+        margin-bottom: 1em;
+    }
 }

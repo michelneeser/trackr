@@ -65,18 +65,22 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     });
 
-    document.querySelector("#deleteStat").addEventListener("click", function() {
-        let xhr = new XMLHttpRequest();
-        xhr.onreadystatechange = function() {
-            if (this.status == 200 && this.readyState == 4) {
-                location.href = "http://localhost:8080/stats";
-            }
+    $('#reallyDeleteStatModal').on('show.bs.modal', function (e) {
+        let removeStat = function() {
+            let xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                if (this.status == 200 && this.readyState == 4) {
+                    location.href = "http://localhost:8080/stats/";
+                }
+            };
+            xhr.open("DELETE", "http://localhost:8080/stats/api/" + token);
+            xhr.send();
         };
-        xhr.open("DELETE", "http://localhost:8080/stats/api/" + token);
-        xhr.send();
+
+        document.querySelector("#deleteStat").addEventListener("click", removeStat);
     });
 
-    $('#reallyDeleteModal').on('show.bs.modal', function (e) {
+    $('#reallyDeleteValueModal').on('show.bs.modal', function (e) {
         let removeSelectedValue = function() {
             let valueId = e.relatedTarget.closest("tr").dataset.valueid;
             let xhr = new XMLHttpRequest();

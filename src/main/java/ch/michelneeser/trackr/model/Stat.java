@@ -79,7 +79,11 @@ public class Stat {
     public String toString() {
         return "Stat{" +
                 "id=" + id +
-                ", token=" + token + "}";
+                ", token='" + token + '\'' +
+                ", createDate=" + createDate +
+                ", name='" + name + '\'' +
+                ", statValues=" + statValues +
+                '}';
     }
 
 }
