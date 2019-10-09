@@ -7,7 +7,6 @@
 
         <title>Trackr - stats</title>
 
-        <!--<link rel="stylesheet" href="/webjars/bootstrap/css/bootstrap.min.css">-->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Mono&display=swap">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -26,12 +25,6 @@
                 <div class="col">
                     <h1 th:if="!${hasName}">Trackr - your (very simple) stats page</h1>
                     <h1 th:if="${hasName}" th:text="${stat.getName()}">name</h1>
-
-                    <!--
-                    <div>
-                        <p>Call the following URL to push stats data: <a th:href="${stat.getURL()}" th:text="${stat.getURL()}">url</a></p>
-                    </div>
-                    -->
 
                     <div id="chart"></div>
 

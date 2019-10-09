@@ -46,3 +46,7 @@ th.delete-column {
         margin-bottom: 1em;
     }
 }
+
+.login-alert {
+    margin-bottom: 1.5em;
+}

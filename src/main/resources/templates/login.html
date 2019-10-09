@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>Trackr - login</title>
+
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Mono&display=swap">
+        <link rel="stylesheet" href="/app.css">
+    </head>
+
+    <body>
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <h1>Trackr - Login</h1>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col login-alert">
+                    <div th:if="${param.error}" class="alert alert-danger" role="alert">Invalid username and/or password.</div>
+                    <div th:if="${param.logout}" class="alert alert-success" role="alert">You have been logged out.</div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    <form th:action="@{/login}" method="post">
+                        <p>
+                            <label for="user">User:</label><br>
+                            <input type="text" name="username" id="user">
+                        </p>
+                        <p>
+                            <label for="password">Password:</label><br>
+                            <input type="password" name="password" id="password">
+                        </p>
+                        <p>
+                            <input type="submit" value="Login" class="btn btn-primary">
+                        </p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </body>
+
+</html>

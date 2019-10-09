@@ -23,13 +23,13 @@ public class StatController {
     @Autowired
     private StatService statService;
 
-    @GetMapping(value={"", "/"})
-    public String getStat() {
+    @GetMapping({"", "/"})
+    public String newStat() {
         return getRedirectToNewStat();
     }
 
     @GetMapping("/{token}")
-    public String getStat(@PathVariable String token, Model model) {
+    public String stat(@PathVariable String token, Model model) {
         Optional<Stat> statOptional = statService.get(token);
 
         if (statOptional.isPresent()) {
